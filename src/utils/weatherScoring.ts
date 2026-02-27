@@ -1,5 +1,5 @@
 import type { DailyForecast } from './weatherApi.ts';
-import type { Mountain, MountainCategory } from '../types/index.ts';
+import type { Mountain } from '../types/index.ts';
 
 export interface MountainRecommendation {
   mountain: Mountain;
