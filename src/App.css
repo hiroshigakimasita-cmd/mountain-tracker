@@ -1,0 +1,797 @@
+/* ---- Layout ---- */
+.app {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* ---- Sidebar ---- */
+.sidebar {
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border-right: 1px solid var(--color-border);
+  z-index: 1000;
+}
+
+.sidebar-header {
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid var(--color-border);
+}
+.sidebar-header h1 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.sidebar-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--color-border);
+}
+.tab {
+  flex: 1;
+  padding: 10px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.tab.active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+.tab:hover {
+  color: var(--color-text);
+}
+
+.sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.sidebar-actions {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sidebar-footer {
+  padding: 10px 16px;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+/* ---- Filter Panel ---- */
+.filter-panel {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+.filter-section {
+  margin-bottom: 10px;
+}
+.filter-section:last-child {
+  margin-bottom: 0;
+}
+.filter-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+.filter-search {
+  width: 100%;
+  padding: 7px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  outline: none;
+}
+.filter-search:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+.filter-radio-group,
+.filter-checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+.filter-radio,
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+/* ---- Mountain List ---- */
+.mountain-list-count {
+  padding: 6px 16px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.mountain-list {
+  overflow-y: auto;
+}
+
+.mountain-list-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.mountain-list-item {
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: background 0.1s;
+}
+.mountain-list-item:hover {
+  background: #f1f5f9;
+}
+.mountain-list-item.selected {
+  background: #eff6ff;
+  border-left: 3px solid var(--color-primary);
+  padding-left: 13px;
+}
+
+.mountain-list-item-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-climbed { background: var(--color-climbed); }
+.dot-unclimbed { background: var(--color-unclimbed); }
+
+.mountain-list-name {
+  font-weight: 600;
+  flex: 1;
+}
+.mountain-list-elevation {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.mountain-list-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding-left: 16px;
+}
+.mountain-list-date {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+/* ---- Map ---- */
+.map-wrapper {
+  flex: 1;
+  position: relative;
+}
+.map-container {
+  width: 100%;
+  height: 100%;
+}
+.map-add-mode {
+  cursor: crosshair !important;
+}
+.map-add-mode .leaflet-container {
+  cursor: crosshair !important;
+}
+
+.map-mode-banner {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: var(--color-primary);
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.map-cursor-pos {
+  font-family: monospace;
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+/* ---- Popup ---- */
+.popup-content h3 {
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.popup-elevation {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  margin-bottom: 4px;
+}
+.popup-date {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.popup-notes {
+  font-size: 12px;
+  margin-top: 4px;
+  padding: 4px 0;
+  color: #475569;
+}
+.popup-actions {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.popup-actions button {
+  padding: 4px 10px;
+  font-size: 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+.popup-actions button:hover {
+  background: #f1f5f9;
+}
+
+/* ---- Mountain Marker ---- */
+.mountain-marker-icon {
+  background: none !important;
+  border: none !important;
+}
+
+/* ---- Mountain Form ---- */
+.mountain-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.form-group label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+  padding: 8px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  font-size: 13px;
+  outline: none;
+  font-family: inherit;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+}
+.form-row {
+  display: flex;
+  gap: 12px;
+}
+.form-row .form-group {
+  flex: 1;
+}
+.form-checkbox {
+  flex-direction: row !important;
+}
+.form-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.form-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  padding-top: 6px;
+}
+.delete-confirm {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--color-danger);
+}
+
+/* ---- GPX ---- */
+.gpx-upload-btn {
+  cursor: pointer;
+  width: 100%;
+}
+
+.gpx-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+}
+
+.gpx-track-list {
+  overflow-y: auto;
+}
+
+.gpx-track-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+.gpx-track-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.gpx-track-info {
+  flex: 1;
+  min-width: 0;
+}
+.gpx-track-name {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.gpx-track-meta {
+  display: flex;
+  gap: 8px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+
+/* ---- Stats ---- */
+.stats-panel {
+  padding: 16px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.stat-card {
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+}
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+.stat-label {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin-top: 2px;
+}
+.stats-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+.stats-categories {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.stats-category-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.stats-category-name {
+  font-size: 12px;
+  width: 60px;
+  flex-shrink: 0;
+}
+.stats-category-count {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  width: 50px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.stats-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.stats-bar-fill {
+  height: 100%;
+  background: var(--color-climbed);
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+/* ---- Recommendation Panel ---- */
+.recommendation-panel {
+  padding: 0;
+}
+
+.rec-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rec-progress {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.rec-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: var(--color-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rec-progress-fill {
+  height: 100%;
+  background: var(--color-primary);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.rec-progress-text {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  flex-shrink: 0;
+}
+
+.rec-last-updated {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.rec-error {
+  padding: 12px 16px;
+  background: #fef2f2;
+  color: #dc2626;
+  font-size: 13px;
+  border-bottom: 1px solid #fecaca;
+}
+
+.rec-empty {
+  padding: 32px 16px;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.rec-date-section {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.rec-date-heading {
+  font-size: 14px;
+  font-weight: 700;
+  padding: 10px 16px 6px;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.rec-card-list {
+  padding: 4px 0;
+}
+
+.recommendation-card {
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.1s;
+  border-bottom: 1px solid #f1f5f9;
+}
+.recommendation-card:hover {
+  background: #f8fafc;
+}
+.recommendation-card:last-child {
+  border-bottom: none;
+}
+
+.rec-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rec-weather-emoji {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.rec-mountain-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rec-mountain-name {
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rec-mountain-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 2px;
+}
+
+.rec-elevation {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.rec-score {
+  font-size: 20px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.rec-score-bar {
+  height: 4px;
+  background: var(--color-border);
+  border-radius: 2px;
+  margin: 6px 0;
+  overflow: hidden;
+}
+.rec-score-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.rec-weather-details {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  flex-wrap: wrap;
+}
+
+/* ---- Recommendation Card Actions ---- */
+.rec-card-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 6px;
+}
+
+.rec-access-btn {
+  font-size: 11px;
+  padding: 3px 8px;
+}
+
+/* ---- Access Plan Modal ---- */
+.modal-wide {
+  max-width: 560px;
+}
+
+.access-plan {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.access-plan-date {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.access-plan-mountain {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.access-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.access-section-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.access-option-card {
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.access-option-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.access-option-name {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+.access-option-distance {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.access-option-detail {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.access-option-hint {
+  font-size: 12px;
+  color: var(--color-text);
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+
+.access-booking-link {
+  align-self: flex-start;
+  margin-top: 4px;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.access-carshare-note {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+
+.access-carshare-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  padding: 4px 0;
+}
+
+.access-carshare-name {
+  font-weight: 500;
+}
+
+.access-carshare-hub {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+/* ---- Auth Section ---- */
+.auth-section {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.auth-login-btn {
+  width: 100%;
+}
+
+.auth-user-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+.auth-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.auth-user-name {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-logout-btn {
+  flex-shrink: 0;
+}
+
+.sync-status {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.sync-status-syncing {
+  color: #f39c12;
+  background: rgba(243, 156, 18, 0.1);
+}
+
+.sync-status-synced {
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.1);
+}
+
+.sync-status-error {
+  color: #e74c3c;
+  background: rgba(231, 76, 60, 0.1);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: 100%;
+    min-width: 100%;
+    height: 45vh;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border);
+  }
+  .map-wrapper {
+    height: 55vh;
+  }
+}
