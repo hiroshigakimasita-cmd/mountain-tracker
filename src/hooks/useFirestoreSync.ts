@@ -189,27 +189,31 @@ export function useFirestoreSync<T extends { id: string }>({
   return { syncStatus, syncWrite, syncDelete, syncBatchWrite };
 }
 
-/** 同じ name を持つアイテムが複数あれば、updatedAt が最新のものだけ残す */
-function deduplicateByName<T extends { id: string; name?: string }>(
+/** 同じ name+座標 を持つアイテムが複数あれば、updatedAt が最新のものだけ残す */
+function deduplicateByName<T extends { id: string }>(
   items: T[],
   getUpdatedAt: (item: T) => string,
 ): { deduped: T[]; removedIds: string[] } {
-  // name がない型の場合はそのまま返す
   if (items.length === 0 || !('name' in items[0])) {
     return { deduped: items, removedIds: [] };
   }
 
-  const byName = new Map<string, T[]>();
+  // name + 座標(丸め) をキーにしてグループ化
+  // 同じ名前でも座標が大きく異なる場合は別の山として扱う
+  const byKey = new Map<string, T[]>();
   for (const item of items) {
-    const name = (item as T & { name: string }).name;
-    if (!byName.has(name)) byName.set(name, []);
-    byName.get(name)!.push(item);
+    const m = item as T & { name: string; lat?: number; lng?: number };
+    const lat = m.lat != null ? m.lat.toFixed(2) : '0';
+    const lng = m.lng != null ? m.lng.toFixed(2) : '0';
+    const key = `${m.name}|${lat}|${lng}`;
+    if (!byKey.has(key)) byKey.set(key, []);
+    byKey.get(key)!.push(item);
   }
 
   const deduped: T[] = [];
   const removedIds: string[] = [];
 
-  for (const group of byName.values()) {
+  for (const group of byKey.values()) {
     if (group.length === 1) {
       deduped.push(group[0]);
     } else {
