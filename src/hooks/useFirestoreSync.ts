@@ -85,14 +85,28 @@ export function useFirestoreSync<T extends { id: string }>({
         });
 
         if (!initialSyncDoneRef.current) {
-          // Initial sync: merge local and remote
+          // Initial sync: merge local and remote, dedup by name+coordinates
           initialSyncDoneRef.current = true;
           const merged = mergeData(localData, remoteItems, getUpdatedAt);
-          setLocalData(merged);
+
+          // Deduplicate: if multiple items share the same name, keep the one with newest updatedAt
+          const { deduped, removedIds } = deduplicateByName(merged, getUpdatedAt);
+          setLocalData(deduped);
+
+          // Remove duplicate docs from Firestore
+          if (removedIds.length > 0) {
+            const colRef2 = collection(db!, 'users', user!.uid, collectionName);
+            const batch2 = writeBatch(db!);
+            for (const rid of removedIds) {
+              batch2.delete(doc(colRef2, rid));
+            }
+            skipNextSnapshotRef.current = true;
+            batch2.commit().catch(console.error);
+          }
 
           // Upload any local-only items to Firestore
           const remoteIds = new Set(remoteItems.keys());
-          const localOnly = localData.filter((item) => !remoteIds.has(item.id));
+          const localOnly = deduped.filter((item) => !remoteIds.has(item.id));
           if (localOnly.length > 0) {
             skipNextSnapshotRef.current = true;
             uploadLocalData(localOnly).catch(console.error);
@@ -173,6 +187,42 @@ export function useFirestoreSync<T extends { id: string }>({
   );
 
   return { syncStatus, syncWrite, syncDelete, syncBatchWrite };
+}
+
+/** 同じ name を持つアイテムが複数あれば、updatedAt が最新のものだけ残す */
+function deduplicateByName<T extends { id: string; name?: string }>(
+  items: T[],
+  getUpdatedAt: (item: T) => string,
+): { deduped: T[]; removedIds: string[] } {
+  // name がない型の場合はそのまま返す
+  if (items.length === 0 || !('name' in items[0])) {
+    return { deduped: items, removedIds: [] };
+  }
+
+  const byName = new Map<string, T[]>();
+  for (const item of items) {
+    const name = (item as T & { name: string }).name;
+    if (!byName.has(name)) byName.set(name, []);
+    byName.get(name)!.push(item);
+  }
+
+  const deduped: T[] = [];
+  const removedIds: string[] = [];
+
+  for (const group of byName.values()) {
+    if (group.length === 1) {
+      deduped.push(group[0]);
+    } else {
+      // Keep the one with the newest updatedAt
+      group.sort((a, b) => getUpdatedAt(b).localeCompare(getUpdatedAt(a)));
+      deduped.push(group[0]);
+      for (let i = 1; i < group.length; i++) {
+        removedIds.push(group[i].id);
+      }
+    }
+  }
+
+  return { deduped, removedIds };
 }
 
 function mergeData<T extends { id: string }>(

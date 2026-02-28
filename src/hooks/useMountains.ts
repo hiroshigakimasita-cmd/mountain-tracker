@@ -8,6 +8,17 @@ import type { SyncStatus } from '../components/sidebar/AuthButton.tsx';
 
 const STORAGE_KEY = 'mountain-tracker-mountains';
 
+/** 名前と座標から決定論的なIDを生成（どのデバイスでも同じ山は同じID） */
+function generateDeterministicId(name: string, lat: number, lng: number): string {
+  const src = `${name}-${lat.toFixed(4)}-${lng.toFixed(4)}`;
+  let hash = 0;
+  for (let i = 0; i < src.length; i++) {
+    hash = ((hash << 5) - hash + src.charCodeAt(i)) | 0;
+  }
+  const hex = Math.abs(hash).toString(16).padStart(8, '0');
+  return `preset-${hex}-${name}`;
+}
+
 export function useMountains(user: User | null = null) {
   const [mountains, setMountains] = useLocalStorage<Mountain[]>(STORAGE_KEY, []);
   const [filter, setFilter] = useState<MountainFilter>({
@@ -114,7 +125,7 @@ export function useMountains(user: User | null = null) {
     const now = new Date().toISOString();
     const presetAsMountains: Mountain[] = PRESET_MOUNTAINS.map((p) => ({
       ...p,
-      id: crypto.randomUUID(),
+      id: generateDeterministicId(p.name, p.lat, p.lng),
       createdAt: now,
       updatedAt: now,
     }));

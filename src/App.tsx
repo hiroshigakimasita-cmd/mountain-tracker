@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { MapView } from './components/map/MapView.tsx';
 import { Sidebar } from './components/sidebar/Sidebar.tsx';
 import { MountainForm } from './components/forms/MountainForm.tsx';
@@ -64,13 +64,20 @@ function App() {
   const [accessPlanMountain, setAccessPlanMountain] = useState<Mountain | null>(null);
   const [accessPlanDate, setAccessPlanDate] = useState<string | null>(null);
 
-  // Auto-load preset data on first launch
+  // Auto-load preset data on first launch (skip if syncing from Firestore)
+  const presetLoadedRef = useRef(false);
   useEffect(() => {
+    if (presetLoadedRef.current) return;
+    // Wait for sync to settle before deciding to load presets
+    if (syncStatus === 'syncing') return;
     if (mountains.length === 0) {
+      presetLoadedRef.current = true;
       const count = loadPresetData();
       console.log(`プリセットデータ ${count} 座を読み込みました`);
+    } else {
+      presetLoadedRef.current = true;
     }
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mountains.length, syncStatus]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleMapClick = useCallback((lat: number, lng: number) => {
     setClickedLat(lat);
