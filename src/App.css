@@ -2,7 +2,9 @@
 .app {
   display: flex;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
+  overflow: hidden;
 }
 
 /* ---- Sidebar ---- */
@@ -10,6 +12,7 @@
   width: var(--sidebar-width);
   min-width: var(--sidebar-width);
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   background: var(--color-surface);
@@ -783,15 +786,55 @@
 @media (max-width: 768px) {
   .app {
     flex-direction: column;
+    height: 100vh;
+    height: 100dvh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
   }
   .sidebar {
     width: 100%;
     min-width: 100%;
+    height: 45dvh;
     height: 45vh;
+    flex: 0 0 45%;
     border-right: none;
     border-bottom: 1px solid var(--color-border);
+    overflow: hidden;
+  }
+  .sidebar-header {
+    padding: 8px 12px 6px;
+  }
+  .sidebar-header h1 {
+    font-size: 14px;
+  }
+  .sidebar-tabs {
+    flex-shrink: 0;
+  }
+  .tab {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+  .sidebar-content {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .sidebar-footer {
+    flex-shrink: 0;
   }
   .map-wrapper {
-    height: 55vh;
+    flex: 1;
+    min-height: 0;
+    height: auto;
+  }
+  .sidebar-actions {
+    padding: 8px 12px;
+  }
+  .btn-full {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }
